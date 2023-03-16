@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Block to add title of the page-->
+    <!--No need to add <title> tag-->
+    <title>
+        {% block title %}{% endblock title %}
+    </title>
+    
+    <!--BootStrap CSS links-->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+
+    <!--fontawsome CSS links-->
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/fontawesome.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}"> 
+
+    <!--Block to add css -->
+    <!--Need to add <style> tag where need to interna css -->
+    {% block css %}{% endblock css %}
+
+
+</head>
+<body>
+
+    <!--Block to add body of the page-->
+    <!--No need to add <body> tag-->
+    {% block body %}{% endblock body %}
+
+    <!--Block to add JavaScript-->
+    <!--Need to add <script> tag when need to add internale JavaScript-->
+    {% block javascript %}{% endblock javascript %}
+
+    <!--BootStrap JavaScript link-->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!--fontawsome JavaScript link-->
+    <script src="{% static 'vendor/fontawesome/js/fontawesome.min.js' %}"></script>
+    <script src="{% static 'vendor/fontawesome/js/all.min.js' %}"></script>
+    
+</body>
+</html>
