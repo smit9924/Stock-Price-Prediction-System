@@ -57,25 +57,25 @@
                     <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
                         <span style="font-size:0.7rem; font-weight:500">30 DAYS</span>
                         <br>
-                        <span id="30ma" style="font-weight: 600;">59236.23</span>
+                        <span id="30ma" style="font-weight: 600;"></span> <!--target div(set value using JS)-->
                     </div>
                     <!--30Days Moving Average-->
                     <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
-                        <span style="font-size:0.7rem; font-weight:500">50 DAYS</span>
+                        <span style="font-size:0.7rem; font-weight:500"></span>
                         <br>
-                        <span id="50ma" style="font-weight: 600;">59236.23</span>
+                        <span id="50ma" style="font-weight: 600;"></span> <!--target div(set value using JS)-->
                     </div>
                     <!--150Days Moving Average-->
                     <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
                         <span style="font-size:0.7rem; font-weight:500">150 DAYS</span>
                         <br>
-                        <span id="150ma" style="font-weight: 600;">59236.23</span>
+                        <span id="150ma" style="font-weight: 600;"></span> <!--target div(set value using JS)-->
                     </div>
                     <!--200Days Moving Average-->
                     <div class="col-lg-5 mt-2  m-1 text-light" style="border-bottom: 2px solid gray;">
                         <span style="font-size:0.7rem; font-weight:500">200 DAYS</span>
                         <br>
-                        <span id="200ma" style="font-weight: 600;">59236.23</span>
+                        <span id="200ma" style="font-weight: 600;"></span> <!--target div(set value using JS)-->
                     </div>
                 </div>
             </div>
@@ -96,11 +96,12 @@
                 type: "GET",
                 data: {
                     interval: "5min",
-                    outputsize: "78"
+                    outputsize: "78",
+                    symbol:"AAPL"
                 },
                 success: function (response) {
                     drawGraph(response.xLabel, response.yLabel)
-                    setMovingAverageData(30, 50, 150, 200)
+                    setMovingAverageData(response)
                 },
                 error: function () {
                     console.log("Error occured!!!")
@@ -117,11 +118,13 @@
                 type: "GET",
                 data: {
                     interval: $(this).attr("data-interval"),
-                    outputsize: $(this).attr("data-outputsize")
+                    outputsize: $(this).attr("data-outputsize"),
+                    symbol:"AAPL",
                 },
                 success: function (response) {
                     drawGraph(response.xLabel, response.yLabel)
                     setMovingAverageData(30, 50, 150, 200)
+                    setMovingAverageData(response)
                 },
                 error: function () {
                     console.log("Error occured!!!")
@@ -182,11 +185,11 @@
         }
 
         // Function to set moving average data
-        function setMovingAverageData(ma30, ma50, ma150, ma200) {
-            $("#30ma").html(ma30)
-            $("#50ma").html(ma50)
-            $("#150ma").html(ma150)
-            $("#200ma").html(ma200)
+        function setMovingAverageData(response) {
+            $("#30ma").html(response.sma30)
+            $("#50ma").html(response.sma50)
+            $("#150ma").html(response.sma150)
+            $("#200ma").html(response.sma200)
         }
     </script>
 
