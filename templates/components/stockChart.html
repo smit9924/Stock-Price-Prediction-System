@@ -1,0 +1,307 @@
+<div class="container-fluid p-3" style="background-color:#333333 ;">
+    <div class="row ">
+        <!--Container for chart-->
+        <div class="col-lg-8 text-center bg-danger">
+            <div class="container">
+                <div class="row">
+                    <!--Conatiner for button-->
+                    <div class="col-lg-12 m-2 bg-warning text-end">
+                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <!--1 Day-->
+                            <div class="btn-group mr-1" role="group" aria-label="First group">
+                                <button id="btn" type="button" class="btn btn-primary" data-time="1D">1 D</button>
+                            </div>
+                            <!--5 Day-->
+                            <div class="btn-group mr-1" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">5 D</button>
+                            </div>
+                            <!--1 Month-->
+                            <div class="btn-group mr-1" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">1 M</button>
+                            </div>
+                            <!--3 Month-->
+                            <div class="btn-group mr-1" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">3 M</button>
+                            </div>
+                            <!--6 Month-->
+                            <div class="btn-group mr-1" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">6 M</button>
+                            </div>
+                            <!--1 Year-->
+                            <div class="btn-group mr-1" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">1 Y</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Container for the chartcanvas-->
+                    <div class="col-lg-12">
+                        <canvas id="chartCanvas" style="width:100%; background-color:black ;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--Container for stock details-->
+        <div class="col-lg-4 text-center bg-success">
+            <div class="container h-100 p-3">
+                <div class="row text-left">
+                    <div class="col-lg-12 text-light" style="font-size:1.2rem; font-weight:700">Simple Moving
+                        Average</div>
+                    <!--30Days Moving Average-->
+                    <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
+                        <span style="font-size:0.7rem; font-weight:500">30 DAYS</span>
+                        <br>
+                        <span style="font-weight: 600;">59236.23</span>
+                    </div>
+                    <!--30Days Moving Average-->
+                    <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
+                        <span style="font-size:0.7rem; font-weight:500">50 DAYS</span>
+                        <br>
+                        <span style="font-weight: 600;">59236.23</span>
+                    </div>
+                    <!--150Days Moving Average-->
+                    <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
+                        <span style="font-size:0.7rem; font-weight:500">150 DAYS</span>
+                        <br>
+                        <span style="font-weight: 600;">59236.23</span>
+                    </div>
+                    <!--200Days Moving Average-->
+                    <div class="col-lg-5 mt-2  m-1 text-light" style="border-bottom: 2px solid gray;">
+                        <span style="font-size:0.7rem; font-weight:500">200 DAYS</span>
+                        <br>
+                        <span style="font-weight: 600;">59236.23</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--jQuery CDN-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <!--Javascript to draw a chart-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+         // Ajax request to fetch data
+        $("#btn").click(function () {
+            console.log("Button clicked")
+            var atter = $(this).attr("data-time")
+            console.log(atter)
+            $.ajax({
+                url: "tsData/",
+                type: "GET",
+                data: {
+                    timePeriod: $(this).attr("data-time")
+                },
+                success: function () {
+                    console.log("AJAX Request executed success fully")
+                },
+                error: function () {
+                    console.log("Error occured!!!")
+                }
+
+            })
+        });
+
+        // Function to draw graph using TIME SERIES data
+        function drawGraph(xVAlues, yValues) {
+            config = {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: "30 Days",
+                        fill: true,
+                        lineTension: 0,
+                        backgroundColor: "rgba(48, 42, 42,1.0)",
+                        borderColor: "red",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                        },
+                    },
+                    scales: {
+                        // yAxes: [{ ticks: { min: 6, max: 16 } }],
+                        xAxes: [{
+                            gridLines: {
+                                drawOnChartArea: false,
+                                color: 'white',
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time'
+                            }
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                drawOnChartArea: false,
+                                color: 'white',
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Stock Name'
+                            }
+                        }],
+
+                    }
+                }
+            }
+
+            new Chart("chartCanvas", config);
+
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+
+config = {
+    type: "line",
+    data: {
+        labels: xValues,
+        datasets: [{
+            label: "30 Days",
+            fill: true,
+            lineTension: 0,
+            backgroundColor: "rgba(48, 42, 42,1.0)",
+            borderColor: "red",
+            data: yValues
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+            },
+        },
+        scales: {
+            // yAxes: [{ ticks: { min: 6, max: 16 } }],
+            xAxes: [{
+                gridLines: {
+                    drawOnChartArea: false,
+                    color: 'white',
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time'
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    drawOnChartArea: false,
+                    color: 'white',
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Stock Name'
+                }
+            }],
+
+        }
+    }
+}
+
+new Chart("chartCanvas", config); -->
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+  var dataPoints = [], currentDate = new Date(), rangeChangedTriggered = false;
+  var stockChart = new CanvasJS.StockChart("chartContainer",{
+    theme: "dark1", //"light2", "dark1", "dark2"
+    title:{
+      text:"Dynamic StockChart"
+    },
+    rangeChanged: function(e) {
+        rangeChangedTriggered = true;
+    },
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true,
+          valueFormatString: "MMM DD, YYYY HH:mm:ss"
+        }
+      },
+      axisY: {
+        title: "Pageviews Per Second"
+      },
+      toolTip: {
+        shared: true
+      },
+      data: [{
+        type: "line",
+        name: "Pageviews",
+        xValueFormatString: "MMM DD, YYYY HH:mm:ss",
+        xValueType: "dateTime",
+        dataPoints : dataPoints
+      }]
+    }],
+    navigator: {
+      slider: {
+        minimum: new Date(currentDate.getTime() - (90 * 1000))
+      },
+      axisX: {
+        labelFontColor: "white"
+      }
+    },
+    rangeSelector: {
+      enabled: false
+    }
+  });
+  var dataCount = 700, ystart = 50, interval = 1000, xstart = (currentDate.getTime() - (700 * 1000));
+  updateChart(xstart, ystart, dataCount, interval);
+  function updateChart(xstart, ystart, length, interval) {
+    var xVal = xstart, yVal = ystart;
+    for(var i = 0; i < length; i++) {
+      yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
+      yVal = Math.min(Math.max(yVal, 5), 90);
+      dataPoints.push({x: xVal,y: yVal});
+      xVal += interval;
+    }
+    if(!rangeChangedTriggered) {
+        stockChart.options.navigator.slider.minimum = new Date(xVal - (90 * 1000)) ;
+    }
+    xstart = xVal;
+    dataCount = 1;
+    ystart = yVal;
+    stockChart.render();
+    setTimeout(function() { updateChart(xstart, ystart, dataCount, interval); }, 1000);
+  }
+}
+</script>
+<div id="chartContainer" style="height: 450px; width: 100%;"></div> -->
