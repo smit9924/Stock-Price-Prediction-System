@@ -4,7 +4,7 @@ import json
 from django.http import JsonResponse
 from twelvedata import TDClient
 
-td = TDClient(apikey="d96500d09e2c454baf996a66ebc8a5ce")
+td = TDClient(apikey="")
 
 # Class that render index page
 class indexPage(View):
