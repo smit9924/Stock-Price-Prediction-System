@@ -3,8 +3,9 @@ from django.views import View
 import json
 from django.http import JsonResponse
 from twelvedata import TDClient
+import requests
 
-td = TDClient(apikey="")
+td = TDClient(apikey="d96500d09e2c454baf996a66ebc8a5ce")
 
 # Class that render index page
 class indexPage(View):
@@ -55,6 +56,10 @@ class tsData(View):
         xLabel.reverse()
         yLabel.reverse()
 
+        # Get the stock summary data
+        url = "https://api.twelvedata.com/stocks?symbol=" + symbol + "&apikey=d96500d09e2c454baf996a66ebc8a5ce"
+        response = requests.get(url).json()['data']
+
         # Object to return as JSON response
         response = {
             "xLabel":xLabel,
@@ -63,6 +68,9 @@ class tsData(View):
             "sma50": sma50,
             "sma150": sma150,
             "sma200":sma200,
+            "stockName":response[0]['name'],
+            "stockSymbol":response[0]['symbol'],
+            "stockExchange":response[0]['exchange'],
         }
 
         return JsonResponse(response)
@@ -72,6 +80,7 @@ class tsData(View):
         data.reverse()
         sum = 0
         for i in range(time):
-            sum += i
+            if i < len(data):
+                sum += float(data[i])
         
-        return (sum / time)
+        return (round((sum / time), 3))

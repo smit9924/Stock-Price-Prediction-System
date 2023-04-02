@@ -9,34 +9,42 @@
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <!--1 Day-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button id="btn" type="button" class="graphChangeBtn btn btn-primary"
-                                    data-interval="5min" data-outputsize="78">1 D</button>
+                                <button id="test" type="button" class="graphChangeBtn btn btn-primary"
+                                    data-interval="5min" data-outputsize="78" data-stock="AAPL">1 D</button>
                             </div>
                             <!--5 Day-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
                                 <button type="button" class="graphChangeBtn btn btn-primary" data-interval="30min"
-                                    data-outputsize="65">5 D</button>
+                                    data-outputsize="65" data-stock="AAPL">5 D</button>
                             </div>
                             <!--1 Month-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
                                 <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="30">1 M</button>
+                                    data-outputsize="30" data-stock="AAPL">1 M</button>
                             </div>
                             <!--3 Month-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
                                 <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="90">3 M</button>
+                                    data-outputsize="90" data-stock="AAPL">3 M</button>
                             </div>
                             <!--6 Month-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
                                 <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="180">6 M</button>
+                                    data-outputsize="180" data-stock="AAPL">6 M</button>
                             </div>
                             <!--1 Year-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
                                 <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="365">1 Y</button>
+                                    data-outputsize="365" data-stock="AAPL">1 Y</button>
                             </div>
+
+                            <!--Search bar-->
+                            <form id="search" class="form-inline my-2 my-lg-0">
+                                <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search"
+                                    aria-label="Search">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                                    id="searchSubmit">Search</button>
+                            </form>
                         </div>
                     </div>
                     <!--Container for the chartcanvas-->
@@ -50,6 +58,26 @@
         <!--Container for stock details-->
         <div class="col-lg-4 text-center">
             <div class="container h-100 p-3">
+
+                <!-- Stock summary Section -->
+                <div class="row text-left">
+                    <div class="col-lg-12 text-light" style="font-size:1.2rem; font-weight:700">Stock Summary</div>
+                    <hr>
+                    <!-- Name -->
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Name:</div>
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockNameSummary"></span></div>
+                    <!--Symbol-->
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Symbol:</div>
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockSymbolSummary"></span></div>
+                    <!-- Industry -->
+                    <!-- <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Industry:</div>
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockIndustrySummary"></span></div> -->
+                    <!-- Exchange -->
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Exchange:</div>
+                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockExchangeSummary"></span></div>
+                </div>
+                <hr>
+                <!--Moving Avg section-->
                 <div class="row text-left">
                     <div class="col-lg-12 text-light" style="font-size:1.2rem; font-weight:700">Simple Moving
                         Average</div>
@@ -61,7 +89,7 @@
                     </div>
                     <!--30Days Moving Average-->
                     <div class="col-lg-5 mt-2 m-1 text-light" style="border-bottom: 2px solid gray;">
-                        <span style="font-size:0.7rem; font-weight:500"></span>
+                        <span style="font-size:0.7rem; font-weight:500">50 DAYS</span>
                         <br>
                         <span id="50ma" style="font-weight: 600;"></span> <!--target div(set value using JS)-->
                     </div>
@@ -88,7 +116,16 @@
 
     <!--Javascript to draw a chart-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <!-- StockName.js file include -->
+    <script src="../../static/js/stockName.js"></script>
+
+    <!-- autoComplete.js file include -->
+    <script src="../../static/js/autoComplete.js"></script>
+
     <script>
+        // Calling function to perform auto complete
+        autocomplete(document.getElementById('searchInput'), stockName)
         //APPLE stock data fetch on load
         $(window).load(function () {
             $.ajax({
@@ -97,11 +134,12 @@
                 data: {
                     interval: "5min",
                     outputsize: "78",
-                    symbol:"AAPL"
+                    symbol: "AAPL"
                 },
                 success: function (response) {
                     drawGraph(response.xLabel, response.yLabel)
                     setMovingAverageData(response)
+                    setStockSummaryData(response)
                 },
                 error: function () {
                     console.log("Error occured!!!")
@@ -119,12 +157,12 @@
                 data: {
                     interval: $(this).attr("data-interval"),
                     outputsize: $(this).attr("data-outputsize"),
-                    symbol:"AAPL",
+                    symbol: $(this).attr("data-stock"),
                 },
                 success: function (response) {
                     drawGraph(response.xLabel, response.yLabel)
-                    setMovingAverageData(30, 50, 150, 200)
                     setMovingAverageData(response)
+                    setStockSummaryData(response)
                 },
                 error: function () {
                     console.log("Error occured!!!")
@@ -135,6 +173,10 @@
 
         // Function to draw graph using TIME SERIES data
         function drawGraph(xValues, yValues) {
+            const canvas = document.getElementById("chartCanvas")
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+            canvas.getContext('2d').clearRect(0, 0, canvas.height, canvas.width)
+
             config = {
                 type: "line",
                 data: {
@@ -191,6 +233,48 @@
             $("#150ma").html(response.sma150)
             $("#200ma").html(response.sma200)
         }
+
+        // function to set Stock SummaryData
+        function setStockSummaryData(response){
+            $("#stockNameSummary").html(response.stockName)
+            $("#stockSymbolSummary").html(response.stockSymbol)
+            // $("#stockIndustrySummary").html(response.stockIndustry)
+            $("#stockExchangeSummary").html(response.stockExchange)
+        }
+
+        //jQuery to make searchbar working
+        $("#searchSubmit").click(function () {
+            event.preventDefault();
+            $.ajax({
+                url: "tsData/",
+                type: "GET",
+                data: {
+                    interval: "5min",
+                    outputsize: "78",
+                    symbol: $("#searchInput").val(),
+                },
+                success: function (response) {
+                    drawGraph(response.xLabel, response.yLabel)
+                    setMovingAverageData(response)
+                    setStockSummaryData(response)
+                    $(".graphChangeBtn").attr('data-stock', $("#searchInput").val())
+                },
+                error: function () {
+                    alert("Enter valid stock ticker!!!")
+                }
+
+            })
+
+        })
+
+        // function to chnage data-stock attribute of buttons
+        function chnageDataStockAttr(ticker) {
+            $(".graphChangeBtn").attr('data-stock', 'smit')
+            console.log("retriving : ", $("#test").attr("data-stock"))
+        }
+
+        // Javascript to make auto complete
+
     </script>
 
 
