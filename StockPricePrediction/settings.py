@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-=p09z-qnnnfsxj*4wxq1=vkuftx&9mw=yhgtxa8fh%a+ls9bk3
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['https://stockpriceprediction.up.railway.app↗']
+CSRF_TRUSTED_ORIGINS = ['https://stock-price-prediction-system-production.up.railway.app/']
 
 
 # Application definition
