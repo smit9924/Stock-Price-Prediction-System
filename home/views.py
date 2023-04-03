@@ -3,12 +3,12 @@ from django.views import View
 from django.http import JsonResponse
 from twelvedata import TDClient
 import requests
-import numpy as np
-import pandas as pd
-import pandas_datareader as data
-import datetime
-from keras.models import load_model
-from sklearn.preprocessing import MinMaxScaler
+# import numpy as np
+# import pandas as pd
+# import pandas_datareader as data
+# import datetime
+# from keras.models import load_model
+# from sklearn.preprocessing import MinMaxScaler
 
 td = TDClient(apikey="d96500d09e2c454baf996a66ebc8a5ce")
 
@@ -91,27 +91,27 @@ class tsData(View):
         return (round((sum / time), 3))
 
 # Class to return Predicted Future Data
-class futureData(View):
-    def get(self, request):
-        # Getting list of next 30 days date
-        current_date = datetime.date.today()
-        futureDate = [(current_date + datetime.timedelta(days=i)).strftime('%Y-%m-%d') for i in range(0, 30)]
+# class futureData(View):
+#     def get(self, request):
+#         # Getting list of next 30 days date
+#         current_date = datetime.date.today()
+#         futureDate = [(current_date + datetime.timedelta(days=i)).strftime('%Y-%m-%d') for i in range(0, 30)]
 
-        # Start and end date to get stock data
-        start = datetime.datetime(2000, 1, 1)
-        end = datetime.datetime(2022, 12, 31)
+#         # Start and end date to get stock data
+#         start = datetime.datetime(2000, 1, 1)
+#         end = datetime.datetime(2022, 12, 31)
         
-        # getting symbol name from the parameter
-        symbol = symbol = request.GET.get("symbol")
-        # Getting data stock data
-        df = data.DataReader(symbol , 'stooq', start, end)['Close'].tolist()
-        df = pd.DataFrame(df[: 30])
+#         # getting symbol name from the parameter
+#         symbol = symbol = request.GET.get("symbol")
+#         # Getting data stock data
+#         df = data.DataReader(symbol , 'stooq', start, end)['Close'].tolist()
+#         df = pd.DataFrame(df[: 30])
 
-        scaler = MinMaxScaler(feature_range=(0,1))
-        inputDf = scaler.fit_transform(df)
-        scaler.inverse_transform(inputDf)
-        import pdb
-        pdb.set_trace()
+#         scaler = MinMaxScaler(feature_range=(0,1))
+#         inputDf = scaler.fit_transform(df)
+#         scaler.inverse_transform(inputDf)
+#         import pdb
+#         pdb.set_trace()
 
         # # Make training data
         # data_training = pd.DataFrame(df['Close'][0:int(len(df) * 0.70)])
