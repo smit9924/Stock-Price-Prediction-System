@@ -1,0 +1,14 @@
+.active-graph-button{
+    background-color: #007bff;
+    border: 2px solid whitesmoke;
+    color: white;
+    font-weight: 800;
+}
+
+.stock-summary-heading{
+    font-weight: 700;
+    border-bottom: 2px solid gray;
+}
+.stock-summary{
+    border-bottom: 2px solid gray;
+}
