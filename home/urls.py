@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import indexPage,tsData, futureData
+from .views import indexPage,tsData
 
 urlpatterns = [
     path('', indexPage.as_view(), name="index_page"),
