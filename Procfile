@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT ecommerce.wsgi:application
+web: waitress-serve --port=$PORT StockPricePrediction.wsgi:application
