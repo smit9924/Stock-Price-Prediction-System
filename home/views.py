@@ -1,9 +1,14 @@
 from django.shortcuts import render
 from django.views import View
-import json
 from django.http import JsonResponse
 from twelvedata import TDClient
 import requests
+import numpy as np
+import pandas as pd
+import pandas_datareader as data
+import datetime
+from keras.models import load_model
+from sklearn.preprocessing import MinMaxScaler
 
 td = TDClient(apikey="d96500d09e2c454baf996a66ebc8a5ce")
 
@@ -84,3 +89,58 @@ class tsData(View):
                 sum += float(data[i])
         
         return (round((sum / time), 3))
+
+# Class to return Predicted Future Data
+class futureData(View):
+    def get(self, request):
+        # Getting list of next 30 days date
+        current_date = datetime.date.today()
+        futureDate = [(current_date + datetime.timedelta(days=i)).strftime('%Y-%m-%d') for i in range(0, 30)]
+
+        # Start and end date to get stock data
+        start = datetime.datetime(2000, 1, 1)
+        end = datetime.datetime(2022, 12, 31)
+        
+        # getting symbol name from the parameter
+        symbol = symbol = request.GET.get("symbol")
+        # Getting data stock data
+        df = data.DataReader(symbol , 'stooq', start, end)['Close'].tolist()
+        df = pd.DataFrame(df[: 30])
+
+        scaler = MinMaxScaler(feature_range=(0,1))
+        inputDf = scaler.fit_transform(df)
+        import pdb
+        pdb.set_trace()
+
+        # # Make training data
+        # data_training = pd.DataFrame(df['Close'][0:int(len(df) * 0.70)])
+        # data_testing = pd.DataFrame(df['Close'][int(len(df)*0.70) : int(len(df))])
+
+        # scaler = MinMaxScaler(feature_range=(0,1))
+
+        # # Converting the data into the array
+        # data_training_array = scaler.fit_transform(data_training)
+
+        # # Loading the model
+        # model = load_model('predictFutureStock.h5')
+
+        # # Testing the model
+        # past_100_days = data_training.tail(100)
+        # final_df = past_100_days.append(data_testing, ignore_index = True)
+        # input_data = scaler.fit_transform(final_df)
+
+        # x_test = []
+        # y_test = []
+
+        # for i in range(100, input_data.shape[0]):
+        #     x_test.append(input_data[i-100:i])
+        #     y_test.append(input_data[i, 0])
+        # x_test, y_test = np.array(x_test), np.array(y_test)
+        # y_predicted = model.predict(x_test)
+
+        # # scaler = scaler.scale_
+        # # scale_factor = 1 / scaler[0]
+        # # y_predicted = y_predicted * scale_factor
+        # # y_test = y_test * scale_factor
+
+        # y_demo = scaler.inverse_transform(scaler.inverse_transform(y_predicted))
