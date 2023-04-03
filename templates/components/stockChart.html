@@ -9,33 +9,33 @@
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <!--1 Day-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button id="test" type="button" class="graphChangeBtn btn btn-primary"
-                                    data-interval="5min" data-outputsize="78" data-stock="AAPL">1 D</button>
+                                <button id="test" type="button" class="active-graph-button graphChangeBtn btn btn-outline-primary"
+                                    data-interval="5min" data-outputsize="78" data-stock="AAPL" data-display="1 DAY">1 D</button>
                             </div>
                             <!--5 Day-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button type="button" class="graphChangeBtn btn btn-primary" data-interval="30min"
-                                    data-outputsize="65" data-stock="AAPL">5 D</button>
+                                <button type="button" class="graphChangeBtn btn btn-outline-primary" data-interval="30min"
+                                    data-outputsize="65" data-stock="AAPL" data-display="5 DAYS">5 D</button>
                             </div>
                             <!--1 Month-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="30" data-stock="AAPL">1 M</button>
+                                <button type="button" class="graphChangeBtn btn btn-outline-primary" data-interval="1day"
+                                    data-outputsize="30" data-stock="AAPL" data-display="1 MONTH">1 M</button>
                             </div>
                             <!--3 Month-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="90" data-stock="AAPL">3 M</button>
+                                <button type="button" class="graphChangeBtn btn btn-outline-primary" data-interval="1day"
+                                    data-outputsize="90" data-stock="AAPL" data-display="3 MONTHS">3 M</button>
                             </div>
                             <!--6 Month-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="180" data-stock="AAPL">6 M</button>
+                                <button type="button" class="graphChangeBtn btn btn-outline-primary" data-interval="1day"
+                                    data-outputsize="180" data-stock="AAPL" data-display="6 MONTHS">6 M</button>
                             </div>
                             <!--1 Year-->
                             <div class="btn-group mr-1" role="group" aria-label="First group">
-                                <button type="button" class="graphChangeBtn btn btn-primary" data-interval="1day"
-                                    data-outputsize="365" data-stock="AAPL">1 Y</button>
+                                <button type="button" class="graphChangeBtn btn btn-outline-primary" data-interval="1day"
+                                    data-outputsize="365" data-stock="AAPL" data-display="1 YEAR">1 Y</button>
                             </div>
 
                             <!--Search bar-->
@@ -64,17 +64,14 @@
                     <div class="col-lg-12 text-light" style="font-size:1.2rem; font-weight:700">Stock Summary</div>
                     <hr>
                     <!-- Name -->
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Name:</div>
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockNameSummary"></span></div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 text-light m-1 stock-summary-heading">Name:</div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 text-light m-1 stock-summary"><span id="stockNameSummary"></span></div>
                     <!--Symbol-->
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Symbol:</div>
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockSymbolSummary"></span></div>
-                    <!-- Industry -->
-                    <!-- <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Industry:</div>
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockIndustrySummary"></span></div> -->
-                    <!-- Exchange -->
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;">Exchange:</div>
-                    <div class="col-lg-5 col-md-6 text-light m-1" style="border-bottom: 2px solid gray;"><span id="stockExchangeSummary"></span></div>
+                    <div class="col-lg-5 col-md-6 col-sm-5 text-light m-1 stock-summary-heading" >Symbol:</div>
+                    <div class="col-lg-5 col-md-6 col-sm-5 text-light m-1 stock-summary"><span id="stockSymbolSummary"></span></div>
+
+                    <div class="col-lg-5 col-md-6 col-sm-5 text-light m-1 stock-summary-heading" >Exchange:</div>
+                    <div class="col-lg-5 col-md-6 col-sm-5 text-light m-1 stock-summary" ><span id="stockExchangeSummary"></span></div>
                 </div>
                 <hr>
                 <!--Moving Avg section-->
@@ -123,306 +120,9 @@
     <!-- autoComplete.js file include -->
     <script src="../../static/js/autoComplete.js"></script>
 
+    <!-- Javascript for this module -->
+    <script src="../../static/js/stockChart.js"></script>
     <script>
-        // Calling function to perform auto complete
-        autocomplete(document.getElementById('searchInput'), stockName)
-        //APPLE stock data fetch on load
-        $(window).load(function () {
-            $.ajax({
-                url: "tsData/",
-                type: "GET",
-                data: {
-                    interval: "5min",
-                    outputsize: "78",
-                    symbol: "AAPL"
-                },
-                success: function (response) {
-                    drawGraph(response.xLabel, response.yLabel)
-                    setMovingAverageData(response)
-                    setStockSummaryData(response)
-                },
-                error: function () {
-                    console.log("Error occured!!!")
-                }
-
-            })
-        });
-
-        // Ajax request to fetch data
-        $(".graphChangeBtn").click(function () {
-
-            $.ajax({
-                url: "tsData/",
-                type: "GET",
-                data: {
-                    interval: $(this).attr("data-interval"),
-                    outputsize: $(this).attr("data-outputsize"),
-                    symbol: $(this).attr("data-stock"),
-                },
-                success: function (response) {
-                    drawGraph(response.xLabel, response.yLabel)
-                    setMovingAverageData(response)
-                    setStockSummaryData(response)
-                },
-                error: function () {
-                    console.log("Error occured!!!")
-                }
-
-            })
-        });
-
-        // Function to draw graph using TIME SERIES data
-        function drawGraph(xValues, yValues) {
-            const canvas = document.getElementById("chartCanvas")
-            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-            canvas.getContext('2d').clearRect(0, 0, canvas.height, canvas.width)
-
-            config = {
-                type: "line",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        label: "30 Days",
-                        fill: true,
-                        lineTension: 0,
-                        backgroundColor: "rgba(48, 42, 42,1.0)",
-                        borderColor: "red",
-                        data: yValues
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: true,
-                        },
-                    },
-                    scales: {
-                        // yAxes: [{ ticks: { min: 6, max: 16 } }],
-                        xAxes: [{
-                            gridLines: {
-                                drawOnChartArea: false,
-                                color: 'white',
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Time'
-                            }
-                        }],
-                        yAxes: [{
-                            gridLines: {
-                                drawOnChartArea: false,
-                                color: 'white',
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Stock Name'
-                            }
-                        }],
-
-                    }
-                }
-            }
-
-            new Chart("chartCanvas", config);
-        }
-
-        // Function to set moving average data
-        function setMovingAverageData(response) {
-            $("#30ma").html(response.sma30)
-            $("#50ma").html(response.sma50)
-            $("#150ma").html(response.sma150)
-            $("#200ma").html(response.sma200)
-        }
-
-        // function to set Stock SummaryData
-        function setStockSummaryData(response){
-            $("#stockNameSummary").html(response.stockName)
-            $("#stockSymbolSummary").html(response.stockSymbol)
-            // $("#stockIndustrySummary").html(response.stockIndustry)
-            $("#stockExchangeSummary").html(response.stockExchange)
-        }
-
-        //jQuery to make searchbar working
-        $("#searchSubmit").click(function () {
-            event.preventDefault();
-            $.ajax({
-                url: "tsData/",
-                type: "GET",
-                data: {
-                    interval: "5min",
-                    outputsize: "78",
-                    symbol: $("#searchInput").val(),
-                },
-                success: function (response) {
-                    drawGraph(response.xLabel, response.yLabel)
-                    setMovingAverageData(response)
-                    setStockSummaryData(response)
-                    $(".graphChangeBtn").attr('data-stock', $("#searchInput").val())
-                },
-                error: function () {
-                    alert("Enter valid stock ticker!!!")
-                }
-
-            })
-
-        })
-
-        // function to chnage data-stock attribute of buttons
-        function chnageDataStockAttr(ticker) {
-            $(".graphChangeBtn").attr('data-stock', 'smit')
-            console.log("retriving : ", $("#test").attr("data-stock"))
-        }
-
-        // Javascript to make auto complete
+       
 
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- 
-var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
-
-config = {
-    type: "line",
-    data: {
-        labels: xValues,
-        datasets: [{
-            label: "30 Days",
-            fill: true,
-            lineTension: 0,
-            backgroundColor: "rgba(48, 42, 42,1.0)",
-            borderColor: "red",
-            data: yValues
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                display: true,
-            },
-        },
-        scales: {
-            // yAxes: [{ ticks: { min: 6, max: 16 } }],
-            xAxes: [{
-                gridLines: {
-                    drawOnChartArea: false,
-                    color: 'white',
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Time'
-                }
-            }],
-            yAxes: [{
-                gridLines: {
-                    drawOnChartArea: false,
-                    color: 'white',
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Stock Name'
-                }
-            }],
-
-        }
-    }
-}
-
-new Chart("chartCanvas", config); -->
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- 
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
-<script type="text/javascript">
-window.onload = function () {
-  var dataPoints = [], currentDate = new Date(), rangeChangedTriggered = false;
-  var stockChart = new CanvasJS.StockChart("chartContainer",{
-    theme: "dark1", //"light2", "dark1", "dark2"
-    title:{
-      text:"Dynamic StockChart"
-    },
-    rangeChanged: function(e) {
-        rangeChangedTriggered = true;
-    },
-    charts: [{
-      axisX: {
-        crosshair: {
-          enabled: true,
-          valueFormatString: "MMM DD, YYYY HH:mm:ss"
-        }
-      },
-      axisY: {
-        title: "Pageviews Per Second"
-      },
-      toolTip: {
-        shared: true
-      },
-      data: [{
-        type: "line",
-        name: "Pageviews",
-        xValueFormatString: "MMM DD, YYYY HH:mm:ss",
-        xValueType: "dateTime",
-        dataPoints : dataPoints
-      }]
-    }],
-    navigator: {
-      slider: {
-        minimum: new Date(currentDate.getTime() - (90 * 1000))
-      },
-      axisX: {
-        labelFontColor: "white"
-      }
-    },
-    rangeSelector: {
-      enabled: false
-    }
-  });
-  var dataCount = 700, ystart = 50, interval = 1000, xstart = (currentDate.getTime() - (700 * 1000));
-  updateChart(xstart, ystart, dataCount, interval);
-  function updateChart(xstart, ystart, length, interval) {
-    var xVal = xstart, yVal = ystart;
-    for(var i = 0; i < length; i++) {
-      yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
-      yVal = Math.min(Math.max(yVal, 5), 90);
-      dataPoints.push({x: xVal,y: yVal});
-      xVal += interval;
-    }
-    if(!rangeChangedTriggered) {
-        stockChart.options.navigator.slider.minimum = new Date(xVal - (90 * 1000)) ;
-    }
-    xstart = xVal;
-    dataCount = 1;
-    ystart = yVal;
-    stockChart.render();
-    setTimeout(function() { updateChart(xstart, ystart, dataCount, interval); }, 1000);
-  }
-}
-</script>
-<div id="chartContainer" style="height: 450px; width: 100%;"></div> -->
