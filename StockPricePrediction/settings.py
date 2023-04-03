@@ -14,7 +14,8 @@ SECRET_KEY = 'django-insecure-=p09z-qnnnfsxj*4wxq1=vkuftx&9mw=yhgtxa8fh%a+ls9bk3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['https://ecommerce.up.railway.app', 'https://www.thunderclient.com']
 
 
 # Application definition
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

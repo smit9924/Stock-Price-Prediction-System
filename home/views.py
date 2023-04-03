@@ -109,6 +109,7 @@ class futureData(View):
 
         scaler = MinMaxScaler(feature_range=(0,1))
         inputDf = scaler.fit_transform(df)
+        scaler.inverse_transform(inputDf)
         import pdb
         pdb.set_trace()
 
